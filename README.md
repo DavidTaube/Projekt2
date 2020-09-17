@@ -1,7 +1,8 @@
 # Projekt2
 Semster 7 Projekt an der HS Wismar 
 
-- Variablenbenennung nach [CamelCase](https://de.wikipedia.org/wiki/Binnenmajuskel) und aussagefähig in Englisch, BSP: kein "x" als Variablennamen 
+- Variablenbe und Methoden Benennung nach [CamelCase](https://de.wikipedia.org/wiki/Binnenmajuskel) und aussagefähig in Englisch
+  - kein "x" als Variablennamen 
 - Commitnachrichten auf Englisch
 - Jedes Feature bekommt seinen eigenen Branch
 - Features werden im Projekttab notiert und bekommen die gleiche Bezeichnung "feature/Rufname_Aufgabe"

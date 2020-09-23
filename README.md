@@ -19,3 +19,8 @@ Semster 7 Projekt an der HS Wismar
 | Felix, Nicole  | 4 |
 | Aaron, Fabian  | 5 |
 | Nico  | Sonderaufgabe 1 |
+
+
+Termin 
+-[] Mittwoch den 30.09.2020  - 10:00
+-[] Mittwoch den 07.09.2020  

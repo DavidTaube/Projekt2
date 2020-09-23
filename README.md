@@ -9,3 +9,13 @@ Semster 7 Projekt an der HS Wismar
 - Änderungen werden in den Dev Branch per Pull Request commited und von David abgenommen
 - Kein Push in den Master nur Pull Requests
 - Bei Problemen oder Fragen eine Issue erstellen
+
+
+| Teilnehmer | Aufgabe NR. |
+| ------------- | ------------- |
+| Josef, Steffi  | 1 |
+| Severin, Dave, Janne  | 2 |
+| Hannes, Sergij  | 3 |
+| Felix, Nicole  | 4 |
+| Aaron, Fabian  | 5 |
+| Content Cell  | Sonderaufgabe 1 |

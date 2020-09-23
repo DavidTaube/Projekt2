@@ -18,4 +18,4 @@ Semster 7 Projekt an der HS Wismar
 | Hannes, Sergij  | 3 |
 | Felix, Nicole  | 4 |
 | Aaron, Fabian  | 5 |
-| Content Cell  | Sonderaufgabe 1 |
+| Nico  | Sonderaufgabe 1 |

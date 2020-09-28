@@ -43,9 +43,9 @@ bool GetBlocks() {
 			GeoBoard board;
 			board.Camera = stoi(LogFile.at(line++));
 			board.Panel = stoi(LogFile.at(line++));
-			board.X = stoi(LogFile.at(line++));
-			board.Y = stoi(LogFile.at(line++));
-			board.Rotation = stoi(LogFile.at(line++));
+			board.X = stod(LogFile.at(line++));
+			board.Y = stod(LogFile.at(line++));
+			board.Rotation = stod(LogFile.at(line++));
 			block.boards.push_back(board);
 		}	
 		block.TurnSignal = stoi(LogFile.at(line++));

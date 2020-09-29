@@ -20,3 +20,10 @@ struct LogBlock
 	int Moist;
 };
 
+
+struct markerDist
+{
+	int marker1;
+	int marker2;
+	double dist;
+};

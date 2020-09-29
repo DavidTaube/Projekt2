@@ -5,33 +5,35 @@
 #include "GeoStruct.cpp"
 #include <sstream>
 
-using namespace std;
-
-vector<LogBlock> Boards;
-vector<string> LogFile;
+std::vector<LogBlock> Boards;
+std::vector<std::string> LogFile;
 
 
-bool getFileContent(std::string fileName, std::vector<std::string>& vecOfStrs)
-{
+// read in the LogFile and push all lines into a
+bool getFileContent(std::string fileName, std::vector<std::string>& vecOfStrs) {
+	// read in file
 	std::ifstream in(fileName.c_str());
-	if (!in)
-	{
+	// throw error if file does not exist
+	if (!in) {
 		std::cerr << "Cannot open the File : " << fileName << std::endl;
 		return false;
 	}
 	std::string str;
-	while (std::getline(in, str))
-	{
+	//read in new line from file
+	while (std::getline(in, str)) {
+		//ignore newlines
 		if (str.size() > 0)
+			// push string into vector
 			vecOfStrs.push_back(str);
 	}
+	// close file to prevent memory leaks
 	in.close();
 	return true;
 }
 
 
 
-
+// convert the strings in the vector LogFile to structs
 bool GetBlocks() {
 	int line = 0;
 	while (true) {
@@ -67,13 +69,30 @@ bool GetBlocks() {
 	}
 }
 
+// init function to collect data from logfiles & save them into structs
+bool init() {
+	// check if file is loaded correctly
+	if (!getFileContent("log191223.txt", LogFile)) { 
+		std::cerr << "INIT:\tERROR LOADING FILE" << std::endl;
+		return false; 
+	}
+	std::cout << "INIT:\tFile loaded successfuly" << std::endl;
+	
+	// check if data is converted to structs
+	if (!GetBlocks()) { 
+		std::cerr << "INIT:\tERROR CONVERTING DATA" << std::endl;
+		return false; 
+	}
+	std::cout << "INIT:\tData successfuly converted to structs" << std::endl;
+	
+	return true;
+}
 
-int main()
-{
-	bool result = getFileContent("log191223.txt", LogFile);
-	cout << result;
-	bool ConvertLogToStructs = GetBlocks();
-	cout << ConvertLogToStructs;
+int main(int argc, char* argv[]) {
+	// initializing data from logfile before proceeding with the programm
+	if (!init()) {
+		return 1;
+	}
 
 	return 0;
 }

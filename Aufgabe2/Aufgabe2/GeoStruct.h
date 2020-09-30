@@ -9,7 +9,6 @@ struct GeoBoard {
 	double Rotation;
 };
 
-
 struct LogBlock
 {
 	int PanelCount;

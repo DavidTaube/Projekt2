@@ -11,10 +11,21 @@ std::vector<LogBlock> Boards;
 std::vector<std::string> LogFile;
 
 
+// Debug Function to print all positions saved in the final Coordinates map
 void DEBUG_getBoardPositions() {
 	for (auto const& element : Coordinates) {
-		std::cout << "BoardPositions:\tright\tdist\tX\tY" << std::endl;
-		std::cout << element.first << "\t\t" << element.second.rightNeighbour << "\t" << element.second.distNeighbour << "\t" << element.second.X << "\t" << element.second.Y << std::endl;
+		std::cout << "Nr:\tright\tdist\tX\tY" << std::endl;
+		std::cout << element.first << "\t" << element.second.rightNeighbour << "\t" << element.second.distNeighbour << "\t" << element.second.X << "\t" << element.second.Y << std::endl;
+	}
+}
+
+//Debug Function to print out all coordinates of every panel of every frame from the logfile 
+void DEBUG_getBlocks() {
+	for (int i = 0; i < Boards.size(); i++) {
+		std::cout << "Block: " << i << "\tSize: " << Boards[i].boards.size() << "/" << Boards[i].PanelCount << std::endl;
+		for (int j = 0; j < Boards[i].boards.size(); j++) {
+			std::cout << "Nr: " << Boards[i].boards[j].Panel << "\tX: " << Boards[i].boards[j].X << "\tY: " << Boards[i].boards[j].Y << std::endl;
+		}
 	}
 }
 
@@ -82,7 +93,7 @@ bool GetBlocks() {
 // init function to collect data from logfiles & save them into structs
 bool init() {
 	// check if file is loaded correctly
-	if (!getFileContent("log191223.txt", LogFile)) { 
+	if (!getFileContent("log200914.txt", LogFile)) { 
 		std::cerr << "INIT:\tERROR LOADING FILE" << std::endl;
 		return false; 
 	}
@@ -99,20 +110,26 @@ bool init() {
 }
 
 int main(int argc, char* argv[]) {
+
+	std::cout << "initializing..." << std::endl;
 	// initializing data from logfile before proceeding with the programm
 	if (!init()) {
 		return 1;
 	}
 
-	// use 0 for the DEBUG boardNumber because its not affected by any plotting or calculation functions
+	// use 0 for the DEBUG boardNumber because its not affected by any plotting or calculation functions // it is safe to leave to test if the programm works
 	Coordinates[0].distNeighbour = 456.4;
 	Coordinates[0].rightNeighbour = 1;
 	Coordinates[0].X = 1337;
 	Coordinates[0].Y = 42;
-	// DEBUG VALUES
+
 	DEBUG_getBoardPositions();
+	//DEBUG_getBlocks();
 
+	calcRightNeighbour(Coordinates, Boards);
 	//calcCoordinates(Coordinates);
-
+	
+	// pause the console application so that the output can be read
+	system("pause");
 	return 0;
 }

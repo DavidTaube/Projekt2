@@ -21,9 +21,6 @@
     <ClCompile Include="Calculations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Coordinates.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="C:\Users\David\Downloads\log200914.txt" />

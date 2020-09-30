@@ -141,7 +141,6 @@
   <ItemGroup>
     <ClCompile Include="Aufgabe2.cpp" />
     <ClCompile Include="Calculations.cpp" />
-    <ClCompile Include="Coordinates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="C:\Users\David\Downloads\log191223.txt" />

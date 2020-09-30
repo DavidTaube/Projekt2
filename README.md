@@ -21,4 +21,4 @@ Semster 7 Projekt an der HS Wismar
 
 Termin 
 - [ ] Mittwoch den 30.09.2020  - 10:00
-- [ ] Mittwoch den 07.09.2020  
+- [ ] Mittwoch den 07.10.2020  - 10:00

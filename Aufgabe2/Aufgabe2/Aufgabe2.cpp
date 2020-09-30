@@ -1,12 +1,22 @@
 #include <iostream>
+#include <map>
 #include <fstream>
 #include <vector>
 #include <string>
-#include "GeoStruct.cpp"
 #include <sstream>
+#include "Aufgabe2.h"
 
+std::map<int, BoardProperties> Coordinates;
 std::vector<LogBlock> Boards;
 std::vector<std::string> LogFile;
+
+
+void DEBUG_getBoardPositions() {
+	for (auto const& element : Coordinates) {
+		std::cout << "BoardPositions:\tright\tdist\tX\tY" << std::endl;
+		std::cout << element.first << "\t\t" << element.second.rightNeighbour << "\t" << element.second.distNeighbour << "\t" << element.second.X << "\t" << element.second.Y << std::endl;
+	}
+}
 
 
 // read in the LogFile and push all lines into a
@@ -93,6 +103,16 @@ int main(int argc, char* argv[]) {
 	if (!init()) {
 		return 1;
 	}
+
+	// use 0 for the DEBUG boardNumber because its not affected by any plotting or calculation functions
+	Coordinates[0].distNeighbour = 456.4;
+	Coordinates[0].rightNeighbour = 1;
+	Coordinates[0].X = 1337;
+	Coordinates[0].Y = 42;
+	// DEBUG VALUES
+	DEBUG_getBoardPositions();
+
+	//calcCoordinates(Coordinates);
 
 	return 0;
 }

@@ -10,6 +10,7 @@
 std::vector<LogBlock> Boards;
 std::vector<std::string> LogFile;
 std::vector<markerDist> Dist;
+std::vector<panelNeighbours> NearestNeighbours;
 
 
 // read in the LogFile and push all lines into a
@@ -73,6 +74,20 @@ bool GetBlocks() {
 }
 
 
+int checkPreviousOccurence(int marker1, int marker2) {
+	for (int i = 1; i <= Dist.size(); i++) {
+		int dpanel1 = Dist[i-1].Panel1;
+		int dpanel2 = Dist[i-1].Panel2;
+		
+		//cout << "m1 " << marker1 << " m2 " << marker2 << "\n";
+		//cout << "d1 " << dpanel1 << " d2 " << dpanel2 << "\n";
+
+		if ((marker1 == dpanel1) && (marker2 == dpanel2)) return i;
+		else if ((marker2 == dpanel1) && (marker1 == dpanel2)) return i;
+	}
+	return 0;
+}
+
 
 
 bool calculateMarkerDist(GeoBoard geo1, GeoBoard geo2) {
@@ -105,14 +120,26 @@ bool calculateMarkerDist(GeoBoard geo1, GeoBoard geo2) {
 
 	d1 = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 
-	markerDist markerDistance;
-	markerDistance.marker1 = geo1.Panel;
-	markerDistance.marker2 = geo2.Panel;
-	markerDistance.dist = d1;
-	
-	cout << "Distance between " << geo1.Panel << " and " << geo2.Panel << " is " << d1 << "\n";
+	int index = checkPreviousOccurence(geo1.Panel, geo2.Panel);
+	// cout << "index: " << index << "\n";
+ 	// calculate average distance if distance has already been calculated
+	if ( index ) {
+		Dist[index-1].Dist = (Dist[index-1].Counter * Dist[index-1].Dist + d1) / (Dist[index-1].Counter + 1);
+		Dist[index-1].Counter = Dist[index-1].Counter + 1;
+		// cout << "I have seen this.\n";
+	}
+	// if distance has not been calculated, push into Dist
+	else {
+		markerDist markerDistance;
+		markerDistance.Panel1 = geo1.Panel;
+		markerDistance.Panel2 = geo2.Panel;
+		markerDistance.Dist = d1;
+		markerDistance.Counter = 1;
 
-	Dist.push_back(markerDistance);
+		Dist.push_back(markerDistance);
+	}
+	
+	// cout << "Distance between " << geo1.Panel << " and " << geo2.Panel << " is " << d1 << "\n";
 
 	return 0;
 
@@ -122,30 +149,39 @@ bool checkMarkerCount() {
 
 	for (size_t i = 0; i < Boards.size(); i++) {
 		if (Boards[i].PanelCount > 2) {
-			//cout << "\nI have seen " << Boards[i].PanelCount << " Panels:\n";
+			// cout << "\nI have seen " << Boards[i].PanelCount << " Panels:\n";
 			LogBlock Board = Boards[i];
 			vector<GeoBoard> myGeoBoards = Board.boards;
 			vector<int> markerNrs;
 			for (int j = 0; j < myGeoBoards.size(); j++) {
 				if (find(markerNrs.begin(), markerNrs.end(), myGeoBoards[j].Panel) != markerNrs.end()) {
-					//cout << "I found " << myGeoBoards[j].Panel << "to be double.\n";
+					// cout << "I found " << myGeoBoards[j].Panel << "to be double.\n";
 					myGeoBoards.erase(myGeoBoards.begin() + j);
 					j = j - 1;
 				}
 				else {
 					markerNrs.push_back(myGeoBoards[j].Panel);
-					//cout << "Pushed back " << myGeoBoards[j].Panel << "\n";
+					// cout << "Pushed back " << myGeoBoards[j].Panel << "\n";
 				}
 			}
 			if (markerNrs.size() > 1)
-				bool whatever = calculateMarkerDist(myGeoBoards[0], myGeoBoards[1]);
-			// to do: get all combinations and calculate distance
+				calculateMarkerDist(myGeoBoards[0], myGeoBoards[1]);
+			else if (markerNrs.size() > 2) {
+				int markerSize = markerNrs.size();
+				for (int i = 0; i < markerSize - 1; i++) {
+					for (int j = i + 1; j < markerSize; j++) {
+						calculateMarkerDist(myGeoBoards[i], myGeoBoards[j]);
+					}
+				}
+			}
 		}
 	}
 
 	return 0;
 
 }
+
+
 
 
 // init function to collect data from logfiles & save them into structs
@@ -175,5 +211,6 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 	checkMarkerCount();
+
 	return 0;
 }

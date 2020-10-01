@@ -23,7 +23,17 @@ struct LogBlock
 
 struct markerDist
 {
-	int marker1;
-	int marker2;
-	double dist;
+	int Panel1;
+	int Panel2;
+	double Dist;
+	int Counter;
+};
+
+struct panelNeighbours 
+{
+	int Panel;
+	int Neighbor1;
+	int Neighbor2;
+	double Distance1;
+	double Distance2;
 };

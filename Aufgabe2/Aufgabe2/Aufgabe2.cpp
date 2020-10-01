@@ -4,6 +4,7 @@
 #include <string>
 #include "GeoStruct.cpp"
 #include <sstream>
+#include <math.h>
 
 #define PI 3.14159265358979323846
 
@@ -34,8 +35,6 @@ bool getFileContent(std::string fileName, std::vector<std::string>& vecOfStrs) {
 	in.close();
 	return true;
 }
-
-
 
 // convert the strings in the vector LogFile to structs
 bool GetBlocks() {
@@ -73,7 +72,6 @@ bool GetBlocks() {
 	}
 }
 
-
 int checkPreviousOccurence(int marker1, int marker2) {
 	for (int i = 1; i <= Dist.size(); i++) {
 		int dpanel1 = Dist[i-1].Panel1;
@@ -88,7 +86,24 @@ int checkPreviousOccurence(int marker1, int marker2) {
 	return 0;
 }
 
+bool calcAngles(GeoBoard geo1, GeoBoard geo2) {
+	double angle[2];
+	GeoBoard geo[2]{ geo1, geo2 };
+	for (int i = 0; i < 2; i++) {
+		// camera1
+		if (geo[i].Camera) {
+			angle[i] = atan(geo[i].X / geo[i].Y);
+		} // camera0
+		else {
+			angle[i] = 120 - atan(geo[i].X / geo[i].Y);
+		}
+	}
 
+
+	if (angle[0] < angle[1]) return 0;
+	// return 0 if geo1 is left of geo2, 1 vice versa
+
+}
 
 bool calculateMarkerDist(GeoBoard geo1, GeoBoard geo2) {
 
@@ -120,6 +135,8 @@ bool calculateMarkerDist(GeoBoard geo1, GeoBoard geo2) {
 
 	d1 = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 
+	int dir = calcAngles(geo1, geo2);
+
 	int index = checkPreviousOccurence(geo1.Panel, geo2.Panel);
 	// cout << "index: " << index << "\n";
  	// calculate average distance if distance has already been calculated
@@ -135,6 +152,7 @@ bool calculateMarkerDist(GeoBoard geo1, GeoBoard geo2) {
 		markerDistance.Panel2 = geo2.Panel;
 		markerDistance.Dist = d1;
 		markerDistance.Counter = 1;
+		markerDistance.dir = dir;
 
 		Dist.push_back(markerDistance);
 	}
@@ -181,7 +199,56 @@ bool checkMarkerCount() {
 
 }
 
+bool  getNearestNeighbors() {
+	for (int i = 0; i < Dist.size(); i++) {
+		int markersi[2]{Dist[i].Panel1, Dist[i].Panel2};
+		
+		for (int m = 0; m < 2; m++) {
 
+			// check, if panel is already in NearestNeighbours
+			int occurenceCheck = 1;
+			for (int n = 0; n < NearestNeighbours.size(); n++) {
+				if (NearestNeighbours[n].Panel == markersi[m]) occurenceCheck = 0;
+			}
+
+			if (occurenceCheck) {
+				panelNeighbours PN;
+				PN.Panel = markersi[m];
+				for (int j = 0; j < Dist.size(); j++) {
+					if (markersi[m] == Dist[j].Panel1) {
+						if ((Dist[j].Dist < PN.Distance1) && (Dist[j].Dist < PN.Distance2)) {
+							PN.Distance1 = Dist[j].Dist;
+							PN.Neighbour1 = Dist[j].Panel2;
+							PN.Angle1 = Dist[j].dir;
+						}
+						else if ((Dist[j].Dist > PN.Distance1) && (Dist[j].Dist < PN.Distance2)) {
+							PN.Distance2 = Dist[j].Dist;
+							PN.Neighbour2 = Dist[j].Panel2;
+							PN.Angle2 = Dist[j].dir;
+						}
+					}
+					else if (markersi[m] == Dist[j].Panel2) {
+						if ((Dist[j].Dist < PN.Distance1) && (Dist[j].Dist < PN.Distance2)) {
+							PN.Distance1 = Dist[j].Dist;
+							PN.Neighbour1 = Dist[j].Panel1;
+							if (Dist[j].dir) PN.Angle1 = 0;
+							else PN.Angle1 = 1;
+						}
+						else if ((Dist[j].Dist > PN.Distance1) && (Dist[j].Dist < PN.Distance2)) {
+							PN.Distance2 = Dist[j].Dist;
+							PN.Neighbour2 = Dist[j].Panel1;
+							if (Dist[j].dir) PN.Angle2 = 0;
+							else PN.Angle2 = 1;
+						}
+					}
+					
+				}
+				NearestNeighbours.push_back(PN);
+			}
+		}
+	}
+	return 0;
+}
 
 
 // init function to collect data from logfiles & save them into structs
@@ -211,6 +278,11 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 	checkMarkerCount();
-
+	getNearestNeighbors();
+	
+	for (int i = 0; i < NearestNeighbours.size(); i++) {
+		cout << "panel " << NearestNeighbours[i].Panel << " x1 " << NearestNeighbours[i].Neighbour1 << " " << NearestNeighbours[i].Angle1 << " x2 " << NearestNeighbours[i].Neighbour2 << " " << NearestNeighbours[i].Angle2 << "\n";
+	}
+	
 	return 0;
 }

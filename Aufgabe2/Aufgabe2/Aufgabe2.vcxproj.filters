@@ -21,6 +21,9 @@
     <ClCompile Include="GeoStruct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Aufgabe4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="C:\Users\David\Downloads\log200914.txt" />

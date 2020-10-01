@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Aufgabe2.cpp" />
+    <ClCompile Include="Aufgabe4.cpp" />
     <ClCompile Include="GeoStruct.cpp" />
   </ItemGroup>
   <ItemGroup>

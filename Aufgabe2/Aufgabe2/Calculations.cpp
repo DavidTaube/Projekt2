@@ -1,6 +1,7 @@
 #include <map>
 #include <math.h>
 #include <iostream>
+#include <numeric>
 #include "Calculations.h"
 
 // temporary 60° value for the cameras
@@ -27,7 +28,7 @@ double calcDistanceBetweenBoards(GeoBoard board1, GeoBoard board2) {
 
 	x2 = board2.X;
 	y2 = board2.Y;
-
+	/*
 	if (board1.Camera != board2.Camera) {
 		sign = (board1.Camera < board2.Camera ? -1.0 : 1.0);
 		d1 = sqrt(x1 * x1 + y1 * y1);
@@ -40,6 +41,7 @@ double calcDistanceBetweenBoards(GeoBoard board1, GeoBoard board2) {
 		x2 = d2 * cos(angle2);
 		y2 = d2 * sin(angle2);
 	}
+	*/
 	d1 = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 
 	return d1;
@@ -47,8 +49,8 @@ double calcDistanceBetweenBoards(GeoBoard board1, GeoBoard board2) {
 
 
 // calculate the coordinates by looking at the corners and switching axies. It does so by adding up the distances from the markers until a corner is reached
-void calcCoordinates(std::map<int, BoardProperties> boards) {
-
+void calcCoordinates(std::map<int, BoardProperties> &boards) {
+	std::cout << "start calculating coordinates..." << std::endl;
 	// set initial numbers
 	int boardNumber = 1;
 	int directionX = 0;
@@ -101,6 +103,7 @@ void calcCoordinates(std::map<int, BoardProperties> boards) {
 			break;
 		}
 	}
+	std::cout << "finished calculating coordinates" << std::endl;
 }
 
 
@@ -121,7 +124,7 @@ std::vector<GeoBoard> sortBoards(std::map<int, GeoBoard> boardMap) {
 				first = false;
 			}
 			// if the Y coordinate is higher than or equal to the current biggest, set the new board in biggest
-			if (element.second.Y >= biggest.Y) {
+			if (element.second.Y <= biggest.Y) {
 				biggest = element.second;
 			}
 		}
@@ -131,13 +134,22 @@ std::vector<GeoBoard> sortBoards(std::map<int, GeoBoard> boardMap) {
 		boardMap.erase(biggest.Panel);
 	}
 
+	for (int i = 0; i < boardVec.size(); i++) {
+		//std::cout << "Panel: " << boardVec[i].Panel << "\tY: " << boardVec[i].Y;
+	}
+
+	//std::cout << std::endl;
+
 	return boardVec;
 }
 
 // calculates the neighbours to the right for all boards.  
-void calcRightNeighbour(std::map<int, BoardProperties> coordinates, std::vector<LogBlock> blocks) {
-
+void calcRightNeighbour(std::map<int, BoardProperties> &coordinates, std::vector<LogBlock> &blocks) {
+	std::cout << "start calculating neighbours..." << std::endl;
 	// iterate over every block
+	std::map<int, std::map<int,double>> tmpDistMap;
+
+	std::map<int, std::map<int, std::vector<double>>>tmpDistVector;
 	for (int blockNumber = 0; blockNumber < blocks.size(); blockNumber++) {
 		
 		// if the block contains just 1 panel, we ignore it because its useless
@@ -146,32 +158,130 @@ void calcRightNeighbour(std::map<int, BoardProperties> coordinates, std::vector<
 			continue;
 		}
 
-		//TODO: This is a relict from testing - the map does not need to be created. the function sortBoards should also work with a plain vector
-		std::map<int, GeoBoard> tmpBoardMap;
-		// set evry boardNumber as a key in the new map with the value of the board itself.
+		// translate into a map to eliminate double entries
+		std::map<int,GeoBoard> tmpBoardMap;
+
+		std::map<int, std::vector<GeoBoard>> tmpVectorBoardMap;
+		// set every boardNumber as a key in the new map with the value of the board itself.
+		int camera;
 		for (int boardNumber = 0; boardNumber < blocks[blockNumber].boards.size(); boardNumber++) {
-			tmpBoardMap[blocks[blockNumber].boards[boardNumber].Panel] = blocks[blockNumber].boards[boardNumber];
+			tmpVectorBoardMap[blocks[blockNumber].boards[boardNumber].Panel].push_back(blocks[blockNumber].boards[boardNumber]);
 		}
-		
+		for (auto const& element : tmpVectorBoardMap) {
+			double sumX = element.second[0].X;
+			double sumY = element.second[0].Y;
+			for (int i = 1; i < element.second.size(); i++) {
+				sumX += element.second[i].X;
+				sumY += element.second[i].Y;
+			}
+			tmpBoardMap[abs(element.first)].X = sumX / element.second.size();
+			tmpBoardMap[abs(element.first)].Y = sumY / element.second.size();
+			tmpBoardMap[abs(element.first)].Panel = abs(element.first);
+			tmpBoardMap[abs(element.first)].Camera = 1;
+		}
+
 		// sort the boards to see their order from right to left
-		std::vector<GeoBoard> vector = sortBoards(tmpBoardMap);
+		//std::cout << "BlockNumber: " << blockNumber << std::endl;
+		std::vector<GeoBoard> sortedBoards = sortBoards(tmpBoardMap);
 
 
-		/*
-		.
-		.
-		.
-		TODO: calculate neighbour
-		
-		*/
+		for (int i = 1; i < sortedBoards.size(); i++) {
+			GeoBoard current = sortedBoards[i];
+			GeoBoard neighbour = sortedBoards[i - 1];
+			tmpDistVector[current.Panel][neighbour.Panel].push_back(calcDistanceBetweenBoards(current, neighbour)) ;
+		}
+
+
 
 
 
 		// DEBUG text to print all block with all boards after they have been sorted and combined
 		//std::cout << "Block: " << blockNumber << std::endl;
-		//for (int i = 0; i < vector.size(); i++) {
-		//	std::cout << "Nr: " << vector[i].Panel << "\tY: " << vector[i].Y << std::endl;
+		//for (int i = 0; i < sortedBoards.size(); i++) {
+		//	std::cout << "Nr: " << sortedBoards[i].Panel << "\tY: " << sortedBoards[i].Y << std::endl;
 		//}
 	}
+
+	for (auto const& element : tmpDistVector) {
+		for (auto const& innerelement : element.second) {
+			tmpDistMap[element.first][innerelement.first] = std::accumulate(innerelement.second.begin(), innerelement.second.end(), 0.0) / innerelement.second.size();
+			std::cout << "Panel: " << element.first << "\tnighbour: " << innerelement.first << "\tavg dist: " << tmpDistMap[element.first][innerelement.first] << std::endl;
+		}
+	}
+
+	for (auto const& element : tmpDistMap) {
+		BoardProperties smallest;
+		bool first = true;
+		for (auto const& innerelement : element.second) {
+			if (first) {
+				smallest.distNeighbour = innerelement.second;
+				smallest.rightNeighbour = innerelement.first;
+				first = false;
+			}
+			if (smallest.distNeighbour > innerelement.second) {
+				smallest.distNeighbour = innerelement.second;
+				smallest.rightNeighbour = innerelement.first;
+			}
+			std::cout << "Panel: " << element.first << "\tNeighbour: " << innerelement.first << "\tdistance: "<< innerelement.second << std::endl;
+		}
+		coordinates[element.first] = smallest;
+	}
+
+	for (auto const& element : coordinates) {
+		std::cout << "Panel: " << element.first << "\tNighbour: " << element.second.rightNeighbour << std::endl;
+	}
+
+	std::cout << "finished calculating neighbours..." << std::endl;
 }
 
+void normalizeCoordinates(std::vector<LogBlock>& blocks) {
+	std::cout << "start normalizing coordinates..." << std::endl;
+	for (int i = 0; i < blocks.size(); i++) {
+		//std::cout << "Block: " << i << std::endl;
+		for (int j = 0; j < blocks[i].boards.size(); j++) {
+			double X = blocks[i].boards[j].X;
+			double Y = blocks[i].boards[j].Y;
+			if (blocks[i].boards[j].Camera == 0) {
+				blocks[i].boards[j].X = X * cos(divergence * PI / 180.0) + Y * sin(divergence * PI / 180.0);
+				blocks[i].boards[j].Y = -X * sin(divergence * PI / 180.0) + Y * cos(divergence * PI / 180.0);
+				blocks[i].boards[j].Camera = 1;
+			}
+			//std::cout << "Nr: " << blocks[i].boards[j].Panel << "\t" << "\tX: " << X << "\tY: " << Y << "\t\t\tX: " << blocks[i].boards[j].X << "\tY: " << blocks[i].boards[j].Y << std::endl;
+
+		}
+	}
+	std::cout << "finished normalizing coordinates" << std::endl;
+}
+
+
+// calculates the divergence (angle) between the two cameras
+void calcDivergence(std::vector<LogBlock>& blocks) {
+	std::cout << "calculating divergence" << std::endl;
+	std::vector<double> divergenceVector;
+	for (int i = 0; i < blocks.size(); i++) {
+		//std::cout << "Block: " << i << std::endl;
+		if (blocks[i].PanelCount < 2) {
+			continue;
+		}
+		std::map<int, GeoBoard> tmpMap;
+		int camera;
+		for (int j = 0; j < blocks[i].boards.size(); j++) {
+			camera = (blocks[i].boards[j].Camera) ? -1 : 1;
+			tmpMap[blocks[i].boards[j].Panel * camera] = blocks[i].boards[j];
+		}
+		for (auto const& element : tmpMap) {
+			if (element.first >= 0) {
+				break;
+			}
+			if (element.second.Panel == tmpMap[element.first * -1].Panel) {
+				//std::cout << "Panel: " << element.second.Panel << "\tfound element match" << std::endl;
+				double angle = 360 - (atan2(element.second.Y, element.second.X) - atan2(tmpMap[element.first * -1].Y, tmpMap[element.first * -1].X)) / PI * 180;
+				//std::cout << "Block: " << i << "\tAngle: " << angle << std::endl;
+				divergenceVector.push_back(angle);
+
+			}
+		}
+	}
+	divergence = std::accumulate(divergenceVector.begin(), divergenceVector.end(), 0.0) / divergenceVector.size();
+	std::cout << "divergence: " << divergence << std::endl;
+}

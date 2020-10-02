@@ -13,9 +13,9 @@ std::vector<std::string> LogFile;
 
 // Debug Function to print all positions saved in the final Coordinates map
 void DEBUG_getBoardPositions() {
+	std::cout << "\nNr\tneighbour\tdist\t\tX\tY" << std::endl;
 	for (auto const& element : Coordinates) {
-		std::cout << "Nr:\tright\tdist\tX\tY" << std::endl;
-		std::cout << element.first << "\t" << element.second.rightNeighbour << "\t" << element.second.distNeighbour << "\t" << element.second.X << "\t" << element.second.Y << std::endl;
+		std::cout << element.first << "\t" << element.second.rightNeighbour << "\t\t" << element.second.distNeighbour << "\t\t" << element.second.X << "\t" << element.second.Y << std::endl;
 	}
 }
 
@@ -118,16 +118,24 @@ int main(int argc, char* argv[]) {
 	}
 
 	// use 0 for the DEBUG boardNumber because its not affected by any plotting or calculation functions // it is safe to leave to test if the programm works
-	Coordinates[0].distNeighbour = 456.4;
-	Coordinates[0].rightNeighbour = 1;
-	Coordinates[0].X = 1337;
-	Coordinates[0].Y = 42;
+	//Coordinates[0].distNeighbour = 456.4;
+	//Coordinates[0].rightNeighbour = 0;
+	//Coordinates[0].X = 1337;
+	//Coordinates[0].Y = 42;
 
-	DEBUG_getBoardPositions();
+	
 	//DEBUG_getBlocks();
 
+	/*
+	TODO:
+	NORMALIZE SLOWS DOWN THE PROGRAMM
+	DOES NOT WORK
+	*/
+	calcDivergence(Boards);
+	normalizeCoordinates(Boards);
 	calcRightNeighbour(Coordinates, Boards);
-	//calcCoordinates(Coordinates);
+	calcCoordinates(Coordinates);
+	DEBUG_getBoardPositions();
 	
 	// pause the console application so that the output can be read
 	system("pause");

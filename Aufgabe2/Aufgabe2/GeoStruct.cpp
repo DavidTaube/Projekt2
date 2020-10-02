@@ -32,13 +32,13 @@ struct markerDist
 };
 
 
-struct panelNeighbours 
+struct panelNeighbours
 {
 	int Panel;
-	int Neighbour1;
-	int Neighbour2;
-	double Distance1 = 1000.0;
-	double Distance2 = 1000.0;
-	int Angle1; // 0 if panel is left of n1, 1 vice versa
-	int Angle2; // 0 if panel is left of n2, 1 vice versa
+	int NeighbourL = 0;
+	int NeighbourR = 0;
+	double DistanceL = 1000.0;
+	double DistanceR = 1000.0;
+	int AngleL = 3; // 0 if panel is left of n1, 1 vice versa
+	int AngleR = 3; // 0 if panel is left of n2, 1 vice versa
 };

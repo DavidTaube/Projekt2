@@ -109,6 +109,20 @@ bool init() {
 	return true;
 }
 
+/*Interface to Drawing Project from 'Aufgabe1'
+	Creates dummy GeoBoards to draw them in Aufgabe 1
+*/
+GeoBoard getArtificialGeoBoard()
+{
+	GeoBoard board;
+	board.Camera = rand() % 1 + 2;
+	board.Panel = rand() % 1 + 8;
+	board.X;
+	board.Y;
+	board.Rotation;
+	return board;
+}
+
 int main(int argc, char* argv[]) {
 
 	std::cout << "initializing..." << std::endl;

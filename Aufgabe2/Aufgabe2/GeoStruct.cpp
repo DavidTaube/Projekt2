@@ -19,15 +19,14 @@ struct MeasurementError
 	double MinY;
 	double AvgX;
 	double AvgY;
-	double RangeX;
-	double RangeY;
+	double Range;
 };
 
 struct LogBlock
 {
 	int PanelCount;
 	vector<GeoBoard> boards;
-	vector<MeasurementsError> offset;
+	vector<MeasurementError> offset;
 	int TurnSignal;
 	int Temp;
 	int Moist;

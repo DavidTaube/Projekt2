@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "GeoStruct.cpp"
+#include "GeoStruct.h"
 #include <sstream>
 
 std::vector<LogBlock> Boards;

@@ -1,9 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "GeoStruct.cpp"
+#include "Aufgabe4.h"
 #include <map>
-
-std::vector<int> Duplicates;
 
 // find duplicate panels in a frame
 void GetDuplicatePanels(std::vector<GeoBoard> Boards) {
@@ -91,9 +89,10 @@ double GetAveragePoint(std::vector<GeoBoard> Boards, int panelNr, bool isX) {
 }
 
 // calculate the range of possible error occurencies
-double GetErrorRange(std::vector<GeoBoard> Boards, int panelNr) {
+double GetErrorRange() {
 	// ToDo
 	// Need functions from other group
+	// Calculate distance, etc. with max/min values - variation in percentage
 	return 0.0; // Percentage
 }
 
@@ -120,7 +119,7 @@ void GetMeasurementsErrors(std::vector<LogBlock> GeoStruct) {
 			offset.MinY = GetMinimumPoint(Frame, offset.Panel, false);
 			offset.AvgX = GetAveragePoint(Frame, offset.Panel, true);
 			offset.AvgY = GetAveragePoint(Frame, offset.Panel, false);
-			offset.Range = GetErrorRange(Frame, offset.Panel);
+			offset.Range = GetErrorRange();
 
 			GeoStruct[i].offset.push_back(offset);
 		}

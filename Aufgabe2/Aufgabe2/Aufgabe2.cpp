@@ -10,6 +10,7 @@ std::map<int, BoardProperties> Coordinates;
 std::vector<LogBlock> Boards;
 std::vector<std::string> LogFile;
 
+std::map<int, fakeData> FakeData;
 
 // Debug Function to print all positions saved in the final Coordinates map
 void DEBUG_getBoardPositions() {
@@ -26,6 +27,23 @@ void DEBUG_getBlocks() {
 		for (int j = 0; j < Boards[i].boards.size(); j++) {
 			std::cout << "Nr: " << Boards[i].boards[j].Panel << "\tX: " << Boards[i].boards[j].X << "\tY: " << Boards[i].boards[j].Y << std::endl;
 		}
+	}
+}
+
+// inserts fake data into the coordinates
+// this is only for development. Because the original Logfiles are crappy, this allows the other groups to insert fakeData and work with it as they normaly would
+void insertFakeData(std::map<int,fakeData> &fakedata) {
+	// remove old data from the map
+	std::map<int, BoardProperties>::iterator itC;
+	for (itC = Coordinates.begin(); itC != Coordinates.end(); ++itC) {
+		Coordinates.erase(itC->first);
+	}
+
+	// iterate over FakeData map and insert values to Coordinates map
+	std::map<int, fakeData>::iterator itF;
+	for (itF = fakedata.begin(); itF != fakedata.end(); ++itF) {
+		Coordinates[itF->first].rightNeighbour = itF->second.rightNeighbour;
+		Coordinates[itF->first].distNeighbour = itF->second.dist;
 	}
 }
 
@@ -116,24 +134,38 @@ int main(int argc, char* argv[]) {
 	if (!init()) {
 		return 1;
 	}
-
-	// use 0 for the DEBUG boardNumber because its not affected by any plotting or calculation functions // it is safe to leave to test if the programm works
-	//Coordinates[0].distNeighbour = 456.4;
-	//Coordinates[0].rightNeighbour = 0;
-	//Coordinates[0].X = 1337;
-	//Coordinates[0].Y = 42;
-
 	
 	//DEBUG_getBlocks();
 
-	/*
-	TODO:
-	NORMALIZE SLOWS DOWN THE PROGRAMM
-	DOES NOT WORK
-	*/
+
+	/*REMEMBER: 
+	 * 1-4 are ALLWAYS CORNERS 
+	 * dist is a DOUBLE 
+	 * rightNeighbour is an INT
+	 */
+	//EXAMPLE FAKE DATA:
+	FakeData[1].rightNeighbour = 5;
+	FakeData[1].dist = 10.0;
+	FakeData[5].rightNeighbour = 2;
+	FakeData[5].dist = 20.0;
+	FakeData[2].rightNeighbour = 12;
+	FakeData[2].dist = 15.0;
+	FakeData[12].rightNeighbour = 3;
+	FakeData[12].dist = 15.0;
+	FakeData[3].rightNeighbour = 7;
+	FakeData[3].dist = 20.0;
+	FakeData[7].rightNeighbour = 4;
+	FakeData[7].dist = 10.0;
+	FakeData[4].rightNeighbour = 6;
+	FakeData[4].dist = 17.0;
+	FakeData[6].rightNeighbour = 1;
+	FakeData[6].dist = 13.0;
+
 	calcDivergence(Boards);
 	normalizeCoordinates(Boards);
 	calcRightNeighbour(Coordinates, Boards);
+	// insert Fake data to allow other groups continue working
+	insertFakeData(FakeData);
 	calcCoordinates(Coordinates);
 	DEBUG_getBoardPositions();
 	

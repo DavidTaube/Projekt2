@@ -6,7 +6,7 @@ struct fakeData {
 	double dist;
 };
 
-void insertFakeData(std::map<int,fakeData> &fakedata);
+void insertFakeData(std::map<int, fakeData>& fakedata);
 void DEBUG_getBlocks();
 void DEBUG_getBoardPositions();
 bool getFileContent(std::string fileName, std::vector<std::string>& vecOfStrs);

@@ -32,28 +32,21 @@ void DEBUG_getBlocks() {
 
 // inserts fake data into the coordinates
 // this is only for development. Because the original Logfiles are crappy, this allows the other groups to insert fakeData and work with it as they normaly would
-void insertFakeData(std::map<int,fakeData> & fakedata) {
-	std::cout << "start inserting fake Data" << std::endl;
+void insertFakeData(std::map<int, fakeData> &fakedata) {
+	std::cout << "start inserting fake Data..." << std::endl;
+	
 	// remove old data from the map
-	for (auto const& element : Coordinates) {
+	std::map<int, BoardProperties> itCoordinates = Coordinates;
+	for (auto const& element : itCoordinates) {
 		Coordinates.erase(element.first);
 	}
-	//std::map<int, BoardProperties>::iterator itC;
-	//for (itC = Coordinates.begin(); itC != Coordinates.end(); ++itC) {
-	//	Coordinates.erase(itC->first);
-	//}
-
 
 	// iterate over FakeData map and insert values to Coordinates map
 	for (auto const& element : fakedata) {
 		Coordinates[element.first].rightNeighbour = element.second.rightNeighbour;
 		Coordinates[element.first].distNeighbour = element.second.dist;
 	}
-	//std::map<int, fakeData>::iterator itF;
-	//for (itF = FakeData.begin(); itF != FakeData.end(); ++itF) {
-	//	Coordinates[itF->first].rightNeighbour = itF->second.rightNeighbour;
-	//	Coordinates[itF->first].distNeighbour = itF->second.dist;
-	//}
+	
 	std::cout << "finished inserting fake Data" << std::endl;
 }
 

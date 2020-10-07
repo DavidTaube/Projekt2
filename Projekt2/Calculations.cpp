@@ -198,7 +198,7 @@ void calcRightNeighbour(std::map<int, BoardProperties> &coordinates, std::vector
 	for (auto const& element : tmpDistVector) {
 		for (auto const& innerelement : element.second) {
 			tmpDistMap[element.first][innerelement.first] = std::accumulate(innerelement.second.begin(), innerelement.second.end(), 0.0) / innerelement.second.size();
-			std::cout << "Panel: " << element.first << "\tnighbour: " << innerelement.first << "\tavg dist: " << tmpDistMap[element.first][innerelement.first] << std::endl;
+			std::cout << "Panel: " << element.first << "\tNeighbour: " << innerelement.first << "\tavg dist: " << tmpDistMap[element.first][innerelement.first] << std::endl;
 		}
 	}
 
@@ -224,7 +224,7 @@ void calcRightNeighbour(std::map<int, BoardProperties> &coordinates, std::vector
 		std::cout << "Panel: " << element.first << "\tNighbour: " << element.second.rightNeighbour << std::endl;
 	}
 
-	std::cout << "finished calculating neighbours..." << std::endl;
+	std::cout << "finished calculating neighbours" << std::endl;
 }
 
 void normalizeCoordinates(std::vector<LogBlock>& blocks) {
@@ -249,7 +249,7 @@ void normalizeCoordinates(std::vector<LogBlock>& blocks) {
 
 // calculates the divergence (angle) between the two cameras
 void calcDivergence(std::vector<LogBlock>& blocks) {
-	std::cout << "calculating divergence" << std::endl;
+	std::cout << "calculating divergence..." << std::endl;
 	std::vector<double> divergenceVector;
 	for (int i = 0; i < blocks.size(); i++) {
 		//std::cout << "Block: " << i << std::endl;

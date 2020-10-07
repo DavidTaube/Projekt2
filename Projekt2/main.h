@@ -1,5 +1,6 @@
 #pragma once
 #include "Calculations.h"
+#include "MeasurementsErrors.h"
 
 struct fakeData {
 	int rightNeighbour;

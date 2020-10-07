@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Calculations.cpp" />
+    <ClCompile Include="MeasurementsErrors.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="C:\Users\David\Downloads\log191223.txt" />
@@ -151,6 +152,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="Calculations.h" />
     <ClInclude Include="GeoStruct.h" />
+    <ClInclude Include="MeasurementsErrors.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

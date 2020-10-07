@@ -165,7 +165,11 @@ int main(int argc, char* argv[]) {
 	FakeData[6].dist = 13.0;
 
 	calcDivergence(Boards);
+	GetMeasurementsErrors(Boards);
+	// Prints the calculated Measurement Errors
+	//PrintMeasurementsErrors(Boards);
 	normalizeCoordinates(Boards);
+	
 	calcRightNeighbour(Coordinates, Boards);
 	// insert Fake data to allow other groups continue working
 	insertFakeData(FakeData);

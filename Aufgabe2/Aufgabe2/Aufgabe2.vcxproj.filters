@@ -18,7 +18,7 @@
     <ClCompile Include="Aufgabe2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeoStruct.cpp">
+    <ClCompile Include="Calculations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -28,6 +28,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeoStruct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Calculations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Aufgabe2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

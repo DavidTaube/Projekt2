@@ -3,6 +3,13 @@
 
 #include "framework.h"
 #include "Aufgabe1_Visualization.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <windows.h>
+//#include <graphics.h>
+
 
 
 #define MAX_LOADSTRING 100
@@ -12,6 +19,8 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
+// Function declaration
+void DrawGeoBoards(HWND hwnd);
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -84,6 +93,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     return RegisterClassExW(&wcex);
 }
 
+
 //
 //   FUNCTION: InitInstance(HINSTANCE, int)
 //
@@ -136,13 +146,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
             case IDM_EXIT:
-                DestroyWindow(hWnd);
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+                //DrawGeoBoards(hWnd);
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
         break;
+
+        
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
@@ -178,4 +191,21 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+GeoBoard getArtificialGeoBoard()
+{
+    GeoBoard board;
+    board.Camera = rand() % 1 + 2;
+    board.Panel = rand() % 1 + 8;
+    board.X = 815.36124;
+    board.Y = 268.754211;
+    board.Rotation = 4.3615;
+    return board;
+}
+void DrawGeoBoards(HWND hwnd) {
+    GeoBoard board1;
+    board1 = getArtificialGeoBoard();
+
+    MoveToEx(hdc, 0, 0, NULL);
+    LineTo(hdc, board1.X, board1.Y);
 }

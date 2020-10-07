@@ -4,8 +4,7 @@
 #include <numeric>
 #include "Calculations.h"
 
-// temporary 60° value for the cameras
-// TODO: Needs to be overwritten at runtime ( prequisits: 1 board must be recognized from both cameras at the same time )
+// temporary 60Â° value for the cameras
 double divergence = 60.0;
 
 // PI Constant withoud needing to include cmath.h and with much higher precision
@@ -138,8 +137,6 @@ std::vector<GeoBoard> sortBoards(std::map<int, GeoBoard> boardMap) {
 		//std::cout << "Panel: " << boardVec[i].Panel << "\tY: " << boardVec[i].Y;
 	}
 
-	//std::cout << std::endl;
-
 	return boardVec;
 }
 
@@ -190,10 +187,6 @@ void calcRightNeighbour(std::map<int, BoardProperties> &coordinates, std::vector
 			GeoBoard neighbour = sortedBoards[i - 1];
 			tmpDistVector[current.Panel][neighbour.Panel].push_back(calcDistanceBetweenBoards(current, neighbour)) ;
 		}
-
-
-
-
 
 		// DEBUG text to print all block with all boards after they have been sorted and combined
 		//std::cout << "Block: " << blockNumber << std::endl;

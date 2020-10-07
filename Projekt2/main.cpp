@@ -14,6 +14,7 @@ std::map<int, fakeData> FakeData;
 
 // Debug Function to print all positions saved in the final Coordinates map
 void DEBUG_getBoardPositions() {
+	std::cout << "\n\nCOORDINATES:" << std::endl;
 	std::cout << "\nNr\tneighbour\tdist\t\tX\tY" << std::endl;
 	for (auto const& element : Coordinates) {
 		std::cout << element.first << "\t" << element.second.rightNeighbour << "\t\t" << element.second.distNeighbour << "\t\t" << element.second.X << "\t" << element.second.Y << std::endl;

@@ -194,7 +194,7 @@ void calcRightNeighbour(std::map<int, BoardProperties> &coordinates, std::vector
 		//	std::cout << "Nr: " << sortedBoards[i].Panel << "\tY: " << sortedBoards[i].Y << std::endl;
 		//}
 	}
-	std::cout << "all neighbours:" << std::endl;
+	//std::cout << "all neighbours:" << std::endl;
 	for (auto const& element : tmpDistVector) {
 		for (auto const& innerelement : element.second) {
 			tmpDistMap[element.first][innerelement.first] = std::accumulate(innerelement.second.begin(), innerelement.second.end(), 0.0) / innerelement.second.size();
@@ -214,13 +214,13 @@ void calcRightNeighbour(std::map<int, BoardProperties> &coordinates, std::vector
 				smallest.distNeighbour = innerelement.second;
 				smallest.rightNeighbour = innerelement.first;
 			}
-			std::cout << "Panel: " << element.first << "\tNeighbour: " << innerelement.first << "\tdistance: " << innerelement.second << std::endl;
+			//std::cout << "Panel: " << element.first << "\tNeighbour: " << innerelement.first << "\tdistance: " << innerelement.second << std::endl;
 		}
 		coordinates[element.first] = smallest;
 	}
-	std::cout << "nearest Neighbour:" << std::endl;
+	//std::cout << "nearest Neighbour:" << std::endl;
 	for (auto const& element : coordinates) {
-		std::cout << "Panel: " << element.first << "\tNeighbour: " << element.second.rightNeighbour << std::endl;
+		//std::cout << "Panel: " << element.first << "\tNeighbour: " << element.second.rightNeighbour << std::endl;
 	}
 
 	std::cout << "finished calculating neighbours" << std::endl;

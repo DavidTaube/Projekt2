@@ -1,2 +1,20 @@
 ﻿  main.cpp
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(180,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(181,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(183,33): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(184,33): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(186,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(187,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(189,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(190,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(192,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(193,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(195,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(196,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(198,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(199,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(201,33): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(202,33): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(206,23): warning C4244: '/=': conversion from 'float' to 'int', possible loss of data
+C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\Projekt2\main.cpp(207,23): warning C4244: '/=': conversion from 'float' to 'int', possible loss of data
   Projekt2.vcxproj -> C:\Users\josef\Desktop\hs_wismar\Bachelor\SemesterVII\Projekt2\x64\Debug\Projekt2.exe

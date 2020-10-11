@@ -131,7 +131,7 @@ bool init() {
 	return true;
 }
 
-void GetXYFromCoordinates() {
+/*void GetXYFromCoordinates() {
 	double x, y;
 	x = Coordinates[1].X;
 	y = Coordinates[1].Y;
@@ -140,20 +140,78 @@ void GetXYFromCoordinates() {
 	std::cout << "Y Coordinate: "<< y <<std::endl;
 	std::cout << "-------- --------"<<std::endl;
 
-}
+}*/
 
 // Draw the SDL Window
 void InitWindow() {
 	//Window Config
-	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_Window* window = SDL_CreateWindow("Visualize Koordinates", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_SHOWN);
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+	SDL_Renderer* renderer;
+	SDL_Window* window;
+	SDL_Point points[8];
+	SDL_Point  startingPoint;
+	startingPoint.x = 0;
+	startingPoint.y = 0;
+	float scale = 8.0;
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+		std::cout << "Failed to init SDL : " << SDL_GetError();
+
+	window = SDL_CreateWindow("Visualize Coordinates", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, 0);
+
+	if (window == nullptr)
+		std::cout << "Failed creating window : " << SDL_GetError();
+
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+	if (renderer == nullptr)
+		std::cout << "Could not create renderer!";
+
+	//SDL_RenderSetLogicalSize(renderer, 1000, 1000);
+
+	// Clear background
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+	//Boards = 1, 5, 2, 12, 3, 7, 4, 6
+	// for scaling purpose adding *10 on each value
+
+
+	points[0].x = Coordinates[1].X*10;
+	points[0].y = Coordinates[1].Y*10;
+
+	points[1].x = Coordinates[2].X *10;
+	points[1].y = Coordinates[2].Y *10;
+
+	points[2].x = Coordinates[3].X*10;
+	points[2].y = Coordinates[3].Y*10;
+
+	points[3].x = Coordinates[4].X*10;
+	points[3].y = Coordinates[4].Y*10;
+
+	points[4].x = Coordinates[5].X*10;
+	points[4].y = Coordinates[5].Y*10;
+
+	points[5].x = Coordinates[6].X*10;
+	points[5].y = Coordinates[6].Y*10;
+
+	points[6].x = Coordinates[7].X*10;
+	points[6].y = Coordinates[7].Y*10;
+
+	points[7].x = Coordinates[12].X*10;
+	points[7].y = Coordinates[12].Y*10;
+	// Apply scale
+	for (int i = 0; i < 7; ++i)
+	{
+		points[i].x /= scale;
+		points[i].y /= scale;
+	}
+
+	SDL_RenderSetScale(renderer, scale, scale);
+	SDL_RenderDrawPoints(renderer, points, 7);
+
 	SDL_RenderPresent(renderer);
-	SDL_Delay(3000);
-	GetXYFromCoordinates();
+
 
 }
 int main(int argc, char* argv[]) {
@@ -191,7 +249,7 @@ int main(int argc, char* argv[]) {
 	FakeData[6].dist = 13.0;
 
 	calcDivergence(Boards);
-	GetMeasurementsErrors(Boards);
+	//GetMeasurementsErrors(Boards);				eure methode dauert scheiße lange ;)
 	// Prints the calculated Measurement Errors
 	//PrintMeasurementsErrors(Boards);
 	normalizeCoordinates(Boards);
@@ -204,7 +262,11 @@ int main(int argc, char* argv[]) {
 	
 
 	//draw Window
+
 	InitWindow();
+	std::cout << "---------- Debug Visualization ----------"<< std::endl;
+	std::cout << "for scaling purpose adding *10 on each value" << std::endl;
+	std::cout << "---------- ----------" << std::endl;
 
 	// pause the console application so that the output can be read
 	system("pause");

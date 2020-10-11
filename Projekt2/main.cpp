@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 #include "main.h"
-
+#include "SDL.h"
 std::map<int, BoardProperties> Coordinates;
 std::vector<LogBlock> Boards;
 std::vector<std::string> LogFile;
@@ -131,6 +131,31 @@ bool init() {
 	return true;
 }
 
+void GetXYFromCoordinates() {
+	double x, y;
+	x = Coordinates[1].X;
+	y = Coordinates[1].Y;
+	std::cout << "-------- Drawing Debugger --------" <<std::endl;
+	std::cout << "X Coordinate: "<< x <<std::endl;
+	std::cout << "Y Coordinate: "<< y <<std::endl;
+	std::cout << "-------- --------"<<std::endl;
+
+}
+
+// Draw the SDL Window
+void InitWindow() {
+	//Window Config
+	SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_Window* window = SDL_CreateWindow("Visualize Koordinates", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_SHOWN);
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
+	SDL_Delay(3000);
+	GetXYFromCoordinates();
+
+}
 int main(int argc, char* argv[]) {
 
 	std::cout << "initializing..." << std::endl;
@@ -177,6 +202,10 @@ int main(int argc, char* argv[]) {
 	calcCoordinates(Coordinates);
 	DEBUG_getBoardPositions();
 	
+
+	//draw Window
+	InitWindow();
+
 	// pause the console application so that the output can be read
 	system("pause");
 	return 0;

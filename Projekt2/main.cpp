@@ -201,14 +201,14 @@ void InitWindow() {
 	points[7].x = Coordinates[12].X*10;
 	points[7].y = Coordinates[12].Y*10;
 	// Apply scale
-	for (int i = 0; i < 7; ++i)
+	for (int i = 0; i < 8; ++i)
 	{
 		points[i].x /= scale;
 		points[i].y /= scale;
 	}
 
 	SDL_RenderSetScale(renderer, scale, scale);
-	SDL_RenderDrawPoints(renderer, points, 7);
+	SDL_RenderDrawPoints(renderer, points, 8);
 
 	SDL_RenderPresent(renderer);
 

@@ -5,12 +5,86 @@
 #include <string>
 #include <sstream>
 #include "main.h"
+#include "SDL.h"
 
 std::map<int, BoardProperties> Coordinates;
 std::vector<LogBlock> Boards;
 std::vector<std::string> LogFile;
 
 std::map<int, fakeData> FakeData;
+
+// Draw the SDL Window
+void InitWindow() {
+	//Window Config
+	SDL_Renderer* renderer;
+	SDL_Window* window;
+	SDL_Point points[8];
+	SDL_Point  startingPoint;
+	startingPoint.x = 0;
+	startingPoint.y = 0;
+	float scale = 8.0;
+
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+		std::cout << "Failed to init SDL : " << SDL_GetError();
+
+	window = SDL_CreateWindow("Visualize Coordinates", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, 0);
+
+	if (window == nullptr)
+		std::cout << "Failed creating window : " << SDL_GetError();
+
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+	if (renderer == nullptr)
+		std::cout << "Could not create renderer!";
+
+	//SDL_RenderSetLogicalSize(renderer, 1000, 1000);
+
+	// Clear background
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+	//Boards = 1, 5, 2, 12, 3, 7, 4, 6
+	// for scaling purpose adding *10 on each value
+
+
+	points[0].x = Coordinates[1].X * 10;
+	points[0].y = Coordinates[1].Y * 10;
+
+	points[1].x = Coordinates[2].X * 10;
+	points[1].y = Coordinates[2].Y * 10;
+
+	points[2].x = Coordinates[3].X * 10;
+	points[2].y = Coordinates[3].Y * 10;
+
+	points[3].x = Coordinates[4].X * 10;
+	points[3].y = Coordinates[4].Y * 10;
+
+	points[4].x = Coordinates[5].X * 10;
+	points[4].y = Coordinates[5].Y * 10;
+
+	points[5].x = Coordinates[6].X * 10;
+	points[5].y = Coordinates[6].Y * 10;
+
+	points[6].x = Coordinates[7].X * 10;
+	points[6].y = Coordinates[7].Y * 10;
+
+	points[7].x = Coordinates[12].X * 10;
+	points[7].y = Coordinates[12].Y * 10;
+	// Apply scale
+	for (int i = 0; i < 8; ++i)
+	{
+		points[i].x /= scale;
+		points[i].y /= scale;
+	}
+
+	SDL_RenderSetScale(renderer, scale, scale);
+	SDL_RenderDrawPoints(renderer, points, 8);
+
+	SDL_RenderPresent(renderer);
+
+
+}
 
 // Debug Function to print all positions saved in the final Coordinates map
 void DEBUG_getBoardPositions() {
@@ -166,16 +240,23 @@ int main(int argc, char* argv[]) {
 	FakeData[6].dist = 13.0;
 
 	calcDivergence(Boards);
+
+	normalizeCoordinates(Boards);
+
 	GetMeasurementsErrors(Boards);
 	// Prints the calculated Measurement Errors
 	//PrintMeasurementsErrors(Boards);
-	normalizeCoordinates(Boards);
 	
 	calcRightNeighbour(Coordinates, Boards);
 	// insert Fake data to allow other groups continue working
 	insertFakeData(FakeData);
 	calcCoordinates(Coordinates);
 	DEBUG_getBoardPositions();
+
+	InitWindow();
+	std::cout << "---------- Debug Visualization ----------" << std::endl;
+	std::cout << "for scaling purpose adding *10 on each value" << std::endl;
+	std::cout << "---------- ----------" << std::endl;
 	
 	// pause the console application so that the output can be read
 	system("pause");

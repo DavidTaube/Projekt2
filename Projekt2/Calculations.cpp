@@ -277,3 +277,131 @@ void calcDivergence(std::vector<LogBlock>& blocks) {
 	divergence = std::accumulate(divergenceVector.begin(), divergenceVector.end(), 0.0) / divergenceVector.size();
 	std::cout << "divergence: " << divergence << std::endl;
 }
+
+// calculates the positions of Kornknecht
+void calcPosKornknecht(std::vector<FakeLogBlock>& FakeBoards, std::map<int, BoardProperties>& Coordinates) {
+	std::cout << "calculating positions of Kornknecht..." << std::endl;
+	std::vector<FakeKornknecht> KornknechtPos;
+	FakeKornknecht kornknecht;
+	for (int i = 0; i < FakeBoards.size(); i++) {
+
+		//cheack if 2 boards were found
+		if (FakeBoards[i].boards.size() < 2) {
+			continue;
+		}
+
+		double a, b, c, alpha, beta, gamma;
+
+		// get length of dist to create triangle
+		a = FakeBoards[i].boards[0].distToKornknecht;
+		b = FakeBoards[i].boards[1].distToKornknecht;
+		c = Coordinates[FakeBoards[i].boards[0].Panel].distNeighbour;
+		
+		// check if sides creat triangle
+		if (a + b <= c || a + c <= b || b + c <= a) {
+			std::cout << "Position couldnt be calculated(cant create triangle)" << std::endl;
+			continue;
+		}
+		
+		//calc angle
+		alpha = acos((((a * a) - (b * b) - (c * c)) / (-2 * b * c)));
+		double alphagrad = alpha * (180/PI);
+
+		beta = asin((b / a) * (sin(alpha)));
+		double betagrad = beta * (180/PI);
+
+		gamma = 180 - alphagrad - betagrad;
+
+		//kornknecht.X = (c*(tan(beta)))/(1+tan(beta));
+		//kornknecht.Y = kornknecht.X * tan(alpha);
+
+		//calc X/Y position
+		kornknecht.X = b*(cos(alpha));
+		kornknecht.Y = b*(sin(alpha));
+
+		//kornknecht.X = ((b * b) + (c * c) - (a * a)) / (2 * c);
+		//kornknecht.Y = sqrt((b * b) - (kornknecht.X * kornknecht.X));
+
+		/*
+		double ax0, ax1, ax2, ax3, ay0, ay1, ay2, ay3;
+		double bx0, bx1, bx2, bx3, by0, by1, by2, by3;
+
+		//rechte Seite
+		double ar = FakeBoards[i].boards[0].distToKornknecht * FakeBoards[i].boards[0].distToKornknecht;
+		double br = FakeBoards[i].boards[1].distToKornknecht * FakeBoards[i].boards[1].distToKornknecht;
+		double y,yx0, yx1;
+
+		//ohne x/y
+		ax0 = FakeBoards[i].boards[0].X * FakeBoards[i].boards[0].X;
+		ay0 = FakeBoards[i].boards[0].Y * FakeBoards[i].boards[0].Y;
+
+		// mit x/y
+		ax1 = FakeBoards[i].boards[0].X * 2;
+		ay1 = FakeBoards[i].boards[0].Y * 2;
+
+		//ohne x/y
+		bx0 = FakeBoards[i].boards[1].X * FakeBoards[i].boards[1].X;
+		by0 = FakeBoards[i].boards[1].Y * FakeBoards[i].boards[1].Y;
+
+		//mit x/y
+		bx1 = FakeBoards[i].boards[1].X * 2;
+		by1 = FakeBoards[i].boards[1].Y * 2;
+
+		//y
+		y = (-ay1) - (-by1);
+
+		if (y == 0) {
+			//x0
+			yx0 = (ar - br - (ax0 - bx0) - (ay0 - by0));
+			//x1
+			yx1 = (0 - ((-ax1) - (-bx1)));
+		}
+		else {
+			//x0
+			yx0 = (ar - br - (ax0 - bx0) - (ay0 - by0)) / y;
+			//x1
+			yx1 = (0 - ((-ax1) - (-bx1)) / y);
+		}
+
+
+
+		//qudratische Gleichung
+		double cx2 = 1 + (yx1*yx1);
+		double cx1, cx0;
+		if (yx0 < 0) {
+			cx1 = (-ax1) - (2 * (yx1 * yx0)) + (ay1 * yx0);
+		}
+		else {
+			cx1 = (-ax1) + (2 * (yx1 * yx0)) + (ay1 * yx0);
+		}
+		cx0 = ax0 + ay0 + (yx0 * yx0) + yx0 - ar;
+
+		cx1 = cx1 / cx2;
+		cx0 = cx0 / cx2;
+
+		double p = cx1;
+		double q = cx0;
+
+		double L1X, L1Y, L2X, L2Y;
+
+		L1X = ((p / 2) * (-1)) + (sqrt(((p / 2) * (p / 2) - q)));
+		L2X = ((p / 2) * (-1)) - (sqrt(((p / 2) * (p / 2) - q)));
+
+		L1Y = (L1X * L1X) + (cx1 * L1X) + cx0;
+		L2Y = (L2X * L2X) + (cx1 * L2X) + cx0;
+
+		if (L1X < 0 || L1Y < 0) {
+			kornknecht.X = L2X;
+			kornknecht.Y = L2Y;
+		}
+		else if (L2X < 0 || L2Y < 0) {
+			kornknecht.X = L1X;
+			kornknecht.Y = L1Y;
+		}*/
+
+		KornknechtPos.push_back(kornknecht);
+		
+		std::cout << "Position Kornknecht:  X: " << KornknechtPos[i].X << "   Y: " << KornknechtPos[i].Y << std::endl;
+	}
+	std::cout << "finished calculating positions of Kornknecht..." << std::endl << std::endl;
+}

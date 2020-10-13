@@ -8,6 +8,7 @@
 
 std::map<int, BoardProperties> Coordinates;
 std::vector<LogBlock> Boards;
+std::vector<FakeLogBlock> FakeBoards;
 std::vector<std::string> LogFile;
 
 std::map<int, fakeData> FakeData;
@@ -49,7 +50,6 @@ void insertFakeData(std::map<int, fakeData> &fakedata) {
 	
 	std::cout << "finished inserting fake Data" << std::endl;
 }
-
 
 // read in the LogFile and push all lines into a
 bool getFileContent(std::string fileName, std::vector<std::string>& vecOfStrs) {
@@ -109,6 +109,73 @@ bool GetBlocks() {
 			return true;
 		}
 	}
+}
+
+// add blocks for fakeboards
+void createFakeScans() {
+	std::cout << std::endl  << "start creating fake Scans..." << std::endl;
+	std::cout << "\nScanNr\tBoardNr1\tX\tY\tdist\tBoardNr2\tX\tY\tdist" << std::endl;
+
+	//create pos and dist of first board
+	int posOfFirstBlock[8][3];
+	posOfFirstBlock[0][0] = 0;
+	posOfFirstBlock[0][1] = 0;
+	posOfFirstBlock[0][2] = 4;
+	posOfFirstBlock[1][0] = 0;
+	posOfFirstBlock[1][1] = 30;
+	posOfFirstBlock[1][2] = 9;
+	posOfFirstBlock[2][0] = 30;
+	posOfFirstBlock[2][1] = 30;
+	posOfFirstBlock[2][2] = 12;
+	posOfFirstBlock[3][0] = 30;
+	posOfFirstBlock[3][1] = 0;
+	posOfFirstBlock[3][2] = 10;
+	posOfFirstBlock[4][0] = 0;
+	posOfFirstBlock[4][1] = 10;
+	posOfFirstBlock[4][2] = 8;
+	posOfFirstBlock[5][0] = 13;
+	posOfFirstBlock[5][1] = 0;
+	posOfFirstBlock[5][2] = 8;
+	posOfFirstBlock[6][0] = 30;
+	posOfFirstBlock[6][1] = 10;
+	posOfFirstBlock[6][2] = 17;
+	posOfFirstBlock[7][0] = 15;
+	posOfFirstBlock[7][1] = 30;
+	posOfFirstBlock[7][2] = 7;
+
+	for (int x = 1; x < 5; x++) {
+		FakeLogBlock block;
+
+		//insert data in first board
+		FakeGeoboard board1;
+		board1.Panel = x;
+		board1.X = posOfFirstBlock[x-1][0];
+		board1.Y = posOfFirstBlock[x-1][1];
+		board1.distToKornknecht = posOfFirstBlock[x-1][2];
+		block.boards.push_back(board1);
+
+		//insert datain second board
+		FakeGeoboard board2;
+		int neighbour = Coordinates[x].rightNeighbour;
+		board2.Panel = neighbour;
+		board2.X = Coordinates[neighbour].X;
+		board2.Y = Coordinates[neighbour].Y;
+
+		//cheack if boardpanel is 12
+		if (board2.Panel > 7) {
+			board2.distToKornknecht = posOfFirstBlock[7][2];
+		}
+		else{
+			board2.distToKornknecht = posOfFirstBlock[neighbour - 1][2];
+		}
+		block.boards.push_back(board2);
+		
+		FakeBoards.push_back(block);
+
+		std::cout << x << "\t" << board1.Panel << "\t\t" << board1.X << "\t" << board1.Y << "\t" << board1.distToKornknecht << "\t" << board2.Panel << "\t\t" << board2.X << "\t" << board2.Y << "\t" << board2.distToKornknecht << std::endl;
+	}
+
+	std::cout << "finished creating fake Scans..." << std::endl;
 }
 
 // init function to collect data from logfiles & save them into structs
@@ -172,6 +239,10 @@ int main(int argc, char* argv[]) {
 	calcCoordinates(Coordinates);
 	DEBUG_getBoardPositions();
 	
+	//task3 create fakescan and calc position of Kornknecht
+	createFakeScans();
+	calcPosKornknecht(FakeBoards, Coordinates);
+
 	// pause the console application so that the output can be read
 	system("pause");
 	return 0;

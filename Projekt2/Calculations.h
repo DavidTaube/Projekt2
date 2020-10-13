@@ -11,3 +11,4 @@ double calcDistanceBetweenBoards(GeoBoard board1, GeoBoard board2);
 double calcDistance(double X, double Y);
 void normalizeCoordinates(std::vector<LogBlock>& blocks);
 void calcDivergence(std::vector<LogBlock>& blocks);
+void calcPosKornknecht(std::vector<FakeLogBlock>& FakeBoards, std::map<int, BoardProperties>& Coordinates);

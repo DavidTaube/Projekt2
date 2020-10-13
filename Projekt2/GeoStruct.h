@@ -9,10 +9,22 @@ struct GeoBoard {
 	double Rotation;
 };
 
+struct MeasurementError {
+	int Panel;
+	double MaxX;
+	double MaxY;
+	double MinX;
+	double MinY;
+	double AvgX;
+	double AvgY;
+	double Range;
+};
+
 struct LogBlock
 {
 	int PanelCount;
 	std::vector<GeoBoard> boards;
+	std::vector<MeasurementError> offset;
 	int TurnSignal;
 	int Temp;
 	int Moist;

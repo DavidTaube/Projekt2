@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include "main.h"
+#include "SDL.h"
 
 std::map<int, BoardProperties> Coordinates;
 std::vector<LogBlock> Boards;
@@ -12,8 +13,60 @@ std::vector<std::string> LogFile;
 
 std::map<int, fakeData> FakeData;
 
+// Draw the SDL Window
+void InitWindow() {
+	//Window Config
+	SDL_Renderer* renderer;
+	SDL_Window* window;
+	SDL_Point points[256];
+	SDL_Point  startingPoint;
+	startingPoint.x = 0;
+	startingPoint.y = 0;
+	float scale = 15.0;
+
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+		std::cout << "Failed to init SDL : " << SDL_GetError();
+
+	window = SDL_CreateWindow("Visualize Coordinates", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, 0);
+
+	if (window == nullptr)
+		std::cout << "Failed creating window : " << SDL_GetError();
+
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+	if (renderer == nullptr)
+		std::cout << "Could not create renderer!";
+
+	// Clear background
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+	// set point to zero to prevent SDL from crashing when no coordinates are found
+	points[0].x = 0;
+	points[0].y = 0;
+
+	for (auto const& element : Coordinates) {
+		points[element.first].x = element.second.X * scale;
+		points[element.first].y = element.second.Y * scale;
+	}
+	
+	// Apply scale
+	for (int i = 0; i < Coordinates.size(); ++i)
+	{
+		points[i].x /= scale;
+		points[i].y /= scale;
+	}
+
+	SDL_RenderSetScale(renderer, scale, scale);
+	SDL_RenderDrawPoints(renderer, points, Coordinates.size());
+
+	SDL_RenderPresent(renderer);
+}
+
 // Debug Function to print all positions saved in the final Coordinates map
 void DEBUG_getBoardPositions() {
+	std::cout << "\n\nCOORDINATES:" << std::endl;
 	std::cout << "\nNr\tneighbour\tdist\t\tX\tY" << std::endl;
 	for (auto const& element : Coordinates) {
 		std::cout << element.first << "\t" << element.second.rightNeighbour << "\t\t" << element.second.distNeighbour << "\t\t" << element.second.X << "\t" << element.second.Y << std::endl;
@@ -165,12 +218,21 @@ int main(int argc, char* argv[]) {
 	FakeData[6].dist = 13.0;
 
 	calcDivergence(Boards);
+
 	normalizeCoordinates(Boards);
+
+	GetMeasurementsErrors(Boards);
+	// Prints the calculated Measurement Errors
+	PrintMeasurementsErrors(Boards);
+	
 	calcRightNeighbour(Coordinates, Boards);
 	// insert Fake data to allow other groups continue working
 	insertFakeData(FakeData);
 	calcCoordinates(Coordinates);
 	DEBUG_getBoardPositions();
+
+	InitWindow();
+	std::cout << "---------- Debug Visualization ----------" << std::endl;
 	
 	// pause the console application so that the output can be read
 	system("pause");
